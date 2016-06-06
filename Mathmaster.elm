@@ -63,7 +63,6 @@ view : Model -> Html Msg
 view model =
   h1 [] [ text (toString model) ]
 
-
 -- MAIN
 
 currentTime : Cmd Msg
