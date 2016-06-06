@@ -6,7 +6,7 @@ import Task exposing (..)
 
 -- MODEL
 
-type alias Model = List (Int)
+type alias Model = List (Int, Int)
 
 initialModel = []
 
@@ -23,8 +23,8 @@ type Msg = NoOp
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    NoOp -> ( model, Cmd.none )
-    Now now -> ( (randomDigitList (timeInSeconds now)), Cmd.none )
+    NoOp -> ( model, Cmd.none)
+    Now now -> ( (randomDigitPairList (timeInSeconds now)), Cmd.none )
 
 
 timeInSeconds : Time  -> Int
@@ -32,17 +32,22 @@ timeInSeconds time =
     round (inSeconds time)
 
 
-randomDigitList : Int -> List (Int)
-randomDigitList seed =
+randomDigitPairList : Int -> List (Int, Int)
+randomDigitPairList seed =
     let
         (list, _) = listGenerator 15 seed
     in
       list
 
 
-listGenerator : Int -> Int -> ( List (Int), Seed )
+listGenerator : Int -> Int -> ( List (Int, Int), Seed )
 listGenerator size seed =
-    Random.step ( Random.list size ( Random.int 1 12 )) ( Random.initialSeed seed )
+    Random.step ( Random.list size integerPairGenerator) ( Random.initialSeed seed)
+
+
+integerPairGenerator : Random.Generator(Int, Int)
+integerPairGenerator =
+    Random.pair (Random.int 1 12) (Random.int 1 12)
 
 
 -- SUBSCRIPTIONS
