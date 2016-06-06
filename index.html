@@ -1,18 +1,20 @@
 <!DOCTYPE HTML>
 <html>
-
 <head>
   <meta charset="UTF-8">
-  <title>Beas MathsMaster</title>
+  <title>Mathsmaster</title>
   <script type="text/javascript" src="mathsmaster.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <h1>Some Problems to solve</h1>
+  <div id="elm-app-goes-here"></div>
 </body>
 
 <script type="text/javascript">
-var app = Elm.fullscreen(Elm.Mathsmaster);
+  var elmDiv = document.getElementById('elm-app-goes-here');
+  Elm.embed(Elm.Mathsmaster, elmDiv);
 </script>
 
 </html>
