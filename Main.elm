@@ -37,7 +37,7 @@ timeInSeconds time =
 randomDigitPairList : Int -> List (Int, Int)
 randomDigitPairList seed =
     let
-        (list, _) = listGenerator 15 seed
+        (list, _) = listGenerator 10 seed
     in
       list
 
@@ -63,8 +63,7 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-  h1 [] (List.map problemRow model)
-
+  ul [] (List.map problemRow model)
 
 
 problemRow : (Int, Int) -> Html Msg
@@ -72,7 +71,7 @@ problemRow integerPair =
     let
         (left, right) = integerPair
     in
-        text(row left right)
+        li [] [text(row left right)]
 
 
 row : Int -> Int -> String
