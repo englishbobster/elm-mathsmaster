@@ -126,7 +126,7 @@ input[type="text"],
 input[type="number"] {
   display: inline;
   margin: 0 5px;
-  width: 200px;
+  width: 150px;
   padding: 15px 20px;
   text-align: center;
   font-size:1.5em;
@@ -147,7 +147,7 @@ input[type="number"]:focus {
   transition: border-color 0.3s ease-in;
 }
 
-ul {
+tr {
   margin: 20px 0;
   padding: 0;
   list-style: none;
@@ -156,7 +156,7 @@ ul {
   text-align: left;
 }
 
-li {
+tr .problem{
   background: #61a1bc;
   background: #fff;
   height: 25px;
@@ -197,7 +197,7 @@ li .label {
   left: 300px;
 }
 
-li.highlight {
+li .highlight {
   background: #61a1bc;
 }
 

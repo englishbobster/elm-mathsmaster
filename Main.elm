@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (..)
+import Html.Attributes exposing (..)
 import Html.App as Html
 import Random exposing (Seed)
 import Time exposing (..)
@@ -63,7 +64,7 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-  ul [] (List.map problemRow model)
+  div [] [table [] (List.map problemRow model)]
 
 
 problemRow : (Int, Int) -> Html Msg
@@ -71,7 +72,15 @@ problemRow integerPair =
     let
         (left, right) = integerPair
     in
-        li [] [text(row left right)]
+        tr [class "problem"]
+            [ td [] [ text(row left right)]
+            , td [] [ input [ type' "number"
+                            , Html.Attributes.min "0"
+                            , Html.Attributes.max "999"
+                            , size 3
+                            ] [ ]
+                    ]
+            ]
 
 
 row : Int -> Int -> String
