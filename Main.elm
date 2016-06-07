@@ -63,7 +63,22 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-  h1 [] [ text (toString model) ]
+  h1 [] (List.map problemRow model)
+
+
+
+problemRow : (Int, Int) -> Html Msg
+problemRow integerPair =
+    let
+        (left, right) = integerPair
+    in
+        text(row left right)
+
+
+row : Int -> Int -> String
+row left right =
+    (toString left) ++ " x " ++ (toString right) ++ " = "
+
 
 -- MAIN
 
