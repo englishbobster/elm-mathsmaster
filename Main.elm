@@ -9,8 +9,8 @@ import Time exposing (..)
 import Task exposing (..)
 
 -- MODEL
-type alias Product = Int
-type alias Model = List (Int, Int, Product)
+type alias Result = Int
+type alias Model = List (Int, Int, Result)
 
 initialModel = []
 
@@ -37,17 +37,17 @@ timeInSeconds time =
     round (inSeconds time)
 
 
-randomDigitPairList : Int -> List (Int, Int, Product)
+randomDigitPairList : Int -> List (Int, Int, Result)
 randomDigitPairList seed =
     let
         (list, _) = listGenerator 10 seed
     in
-        addProductTo list
+        addZeroResult list
 
 
-addProductTo : List (Int, Int) -> List (Int, Int, Product)
-addProductTo list =
-    List.map (\(a,b) -> (a, b, a*b)) list
+addZeroResult : List (Int, Int) -> List (Int, Int, Result)
+addZeroResult list =
+    List.map (\(a,b) -> (a, b, 0)) list
 
 
 listGenerator : Int -> Int -> ( List (Int, Int), Seed )
@@ -72,12 +72,12 @@ view model =
   div [] [table [] (List.map problemRow model)]
 
 
-problemRow : (Int, Int, Product) -> Html Msg
+problemRow : (Int, Int, Result) -> Html Msg
 problemRow integerPair =
     let
-        (left, right, product) = integerPair
+        (left, right, result) = integerPair
     in
-        tr [classList [ ("highlight", left*right == product) ] ]
+        tr [classList [ ("highlight", left*right == result) ] ]
             [ quizElement left right
             , answerElement
             ]
@@ -94,6 +94,7 @@ answerElement =
                    , Html.Attributes.min "0"
                    , Html.Attributes.max "999"
                    , size 3
+                   , value "0"
                    , onInput Answer
                    ] [ ]
            ]
