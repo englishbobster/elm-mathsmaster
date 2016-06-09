@@ -30,15 +30,18 @@ initial = ( initialModel, currentTime )
 -- UPDATE
 type Msg = NoOp
     | Now Time
-    | Answer String
+    | Answer Int String
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     NoOp -> ( model, Cmd.none)
+
     Now now -> ( (quizGenerator 10 (timeInSeconds now)), Cmd.none )
-    Answer answer -> ( model, Cmd.none )
+
+    Answer index result -> (model, Cmd.none )
+
 
 
 timeInSeconds : Time  -> Int
@@ -72,10 +75,10 @@ view model =
 
 
 problemRow : (Index, Multiplication) -> Html Msg
-problemRow (_, multi)  =
+problemRow (index, multi)  =
     tr [classList [ ("highlight", multi.left * multi.right == multi.result) ] ]
         [ quizElement multi.left multi.right
-        , answerElement
+        , answerElement index
         ]
 
 
@@ -84,14 +87,14 @@ quizElement left right =
     td [] [ text(row left right) ]
 
 
-answerElement : Html Msg
-answerElement =
+answerElement : Int -> Html Msg
+answerElement index =
      td [] [ input [ type' "number"
                    , Html.Attributes.min "0"
                    , Html.Attributes.max "999"
                    , size 3
                    , value "0"
-                   , onInput Answer
+                   , onInput (Answer index)
                    ] [ ]
            ]
 
