@@ -19,7 +19,6 @@ initial = ( initialModel, currentTime )
 
 
 -- UPDATE
-
 type Msg = NoOp
     | Now Time
     | Answer String
@@ -62,14 +61,12 @@ integerPairGenerator =
 
 
 -- SUBSCRIPTIONS
-
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.none
 
 
 -- VIEW
-
 view : Model -> Html Msg
 view model =
   div [] [table [] (List.map problemRow model)]
@@ -81,15 +78,25 @@ problemRow integerPair =
         (left, right, _) = integerPair
     in
         tr [class "problem"]
-            [ td [] [ text(row left right)]
-            , td [] [ input [ type' "number"
-                            , Html.Attributes.min "0"
-                            , Html.Attributes.max "999"
-                            , size 3
-                            , onInput Answer
-                            ] [ ]
-                    ]
+            [ quizElement left right
+            , answerElement
             ]
+
+
+quizElement : Int -> Int -> Html Msg
+quizElement left right =
+    td [] [ text(row left right) ]
+
+
+answerElement : Html Msg
+answerElement =
+     td [] [ input [ type' "number"
+                   , Html.Attributes.min "0"
+                   , Html.Attributes.max "999"
+                   , size 3
+                   , onInput Answer
+                   ] [ ]
+           ]
 
 
 row : Int -> Int -> String
@@ -98,7 +105,6 @@ row left right =
 
 
 -- MAIN
-
 currentTime : Cmd Msg
 currentTime =
     perform (\_ -> NoOp) Now Time.now
