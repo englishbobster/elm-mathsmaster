@@ -156,6 +156,10 @@ tr {
   text-align: left;
 }
 
+tr.highlight {
+  background: #0CED2A;
+}
+
 tr .problem{
   background: #61a1bc;
   background: #fff;
@@ -195,10 +199,6 @@ li .label {
   position: absolute;
   top: 18px;
   left: 300px;
-}
-
-li .highlight {
-  background: #61a1bc;
 }
 
 li .delete {

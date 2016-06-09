@@ -75,9 +75,9 @@ view model =
 problemRow : (Int, Int, Product) -> Html Msg
 problemRow integerPair =
     let
-        (left, right, _) = integerPair
+        (left, right, product) = integerPair
     in
-        tr [class "problem"]
+        tr [classList [ ("highlight", left*right == product) ] ]
             [ quizElement left right
             , answerElement
             ]
