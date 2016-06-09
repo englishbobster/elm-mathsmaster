@@ -9,10 +9,19 @@ import Time exposing (..)
 import Task exposing (..)
 
 -- MODEL
-type alias Result = Int
-type alias Model = List (Int, Int, Result)
+type alias Index = Int
+type alias Multiplication =
+    {
+      left: Int
+    , right: Int
+    , result: Int
+    }
 
+type alias Model = List (Index, Multiplication)
+
+initialModel : Model
 initialModel = []
+
 
 initial : ( Model, Cmd Msg )
 initial = ( initialModel, currentTime )
@@ -28,7 +37,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     NoOp -> ( model, Cmd.none)
-    Now now -> ( (randomDigitPairList (timeInSeconds now)), Cmd.none )
+    Now now -> ( (quizGenerator 10 (timeInSeconds now)), Cmd.none )
     Answer answer -> ( model, Cmd.none )
 
 
@@ -36,27 +45,17 @@ timeInSeconds : Time  -> Int
 timeInSeconds time =
     round (inSeconds time)
 
-
-randomDigitPairList : Int -> List (Int, Int, Result)
-randomDigitPairList seed =
+quizGenerator : Int -> Int -> List (Index, Multiplication)
+quizGenerator size seed =
     let
-        (list, _) = listGenerator 10 seed
+       (list, _) = Random.step ( Random.list size intPairGen) ( Random.initialSeed seed)
+
     in
-        addZeroResult list
+       List.indexedMap (\i (a,b) ->  (i, {left = a, right = b, result = 0})) list
 
 
-addZeroResult : List (Int, Int) -> List (Int, Int, Result)
-addZeroResult list =
-    List.map (\(a,b) -> (a, b, 0)) list
-
-
-listGenerator : Int -> Int -> ( List (Int, Int), Seed )
-listGenerator size seed =
-    Random.step ( Random.list size integerPairGenerator) ( Random.initialSeed seed)
-
-
-integerPairGenerator : Random.Generator(Int, Int)
-integerPairGenerator =
+intPairGen : Random.Generator(Int, Int)
+intPairGen =
     Random.pair (Random.int 1 12) (Random.int 1 12)
 
 
@@ -72,15 +71,12 @@ view model =
   div [] [table [] (List.map problemRow model)]
 
 
-problemRow : (Int, Int, Result) -> Html Msg
-problemRow integerPair =
-    let
-        (left, right, result) = integerPair
-    in
-        tr [classList [ ("highlight", left*right == result) ] ]
-            [ quizElement left right
-            , answerElement
-            ]
+problemRow : (Index, Multiplication) -> Html Msg
+problemRow (_, multi)  =
+    tr [classList [ ("highlight", multi.left * multi.right == multi.result) ] ]
+        [ quizElement multi.left multi.right
+        , answerElement
+        ]
 
 
 quizElement : Int -> Int -> Html Msg
