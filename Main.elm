@@ -3,13 +3,14 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.App as Html
+import Html.Events exposing (onInput)
 import Random exposing (Seed)
 import Time exposing (..)
 import Task exposing (..)
 
 -- MODEL
-
-type alias Model = List (Int, Int)
+type alias Product = Int
+type alias Model = List (Int, Int, Product)
 
 initialModel = []
 
@@ -21,6 +22,7 @@ initial = ( initialModel, currentTime )
 
 type Msg = NoOp
     | Now Time
+    | Answer String
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -28,6 +30,7 @@ update msg model =
   case msg of
     NoOp -> ( model, Cmd.none)
     Now now -> ( (randomDigitPairList (timeInSeconds now)), Cmd.none )
+    Answer answer -> ( model, Cmd.none )
 
 
 timeInSeconds : Time  -> Int
@@ -35,12 +38,17 @@ timeInSeconds time =
     round (inSeconds time)
 
 
-randomDigitPairList : Int -> List (Int, Int)
+randomDigitPairList : Int -> List (Int, Int, Product)
 randomDigitPairList seed =
     let
         (list, _) = listGenerator 10 seed
     in
-      list
+        addProductTo list
+
+
+addProductTo : List (Int, Int) -> List (Int, Int, Product)
+addProductTo list =
+    List.map (\(a,b) -> (a, b, a*b)) list
 
 
 listGenerator : Int -> Int -> ( List (Int, Int), Seed )
@@ -67,10 +75,10 @@ view model =
   div [] [table [] (List.map problemRow model)]
 
 
-problemRow : (Int, Int) -> Html Msg
+problemRow : (Int, Int, Product) -> Html Msg
 problemRow integerPair =
     let
-        (left, right) = integerPair
+        (left, right, _) = integerPair
     in
         tr [class "problem"]
             [ td [] [ text(row left right)]
@@ -78,6 +86,7 @@ problemRow integerPair =
                             , Html.Attributes.min "0"
                             , Html.Attributes.max "999"
                             , size 3
+                            , onInput Answer
                             ] [ ]
                     ]
             ]
