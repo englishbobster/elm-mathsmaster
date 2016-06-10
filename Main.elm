@@ -9,15 +9,15 @@ import Time exposing (..)
 import Task exposing (..)
 
 -- MODEL
-type alias Index = Int
 type alias Multiplication =
     {
       left: Int
     , right: Int
     , result: Int
+    , index: Int
     }
 
-type alias Model = List (Index, Multiplication)
+type alias Model = List Multiplication
 
 initialModel : Model
 initialModel = []
@@ -36,25 +36,27 @@ type Msg = NoOp
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    NoOp -> ( model, Cmd.none)
+    NoOp ->
+        ( model, Cmd.none)
 
-    Now now -> ( (quizGenerator 10 (timeInSeconds now)), Cmd.none )
+    Now now ->
+        ( (quizGenerator 10 (timeInSeconds now)), Cmd.none )
 
-    Answer index result -> (model, Cmd.none )
-
+    Answer index result ->
+        (model, Cmd.none)
 
 
 timeInSeconds : Time  -> Int
 timeInSeconds time =
     round (inSeconds time)
 
-quizGenerator : Int -> Int -> List (Index, Multiplication)
+quizGenerator : Int -> Int -> List Multiplication
 quizGenerator size seed =
     let
        (list, _) = Random.step ( Random.list size intPairGen) ( Random.initialSeed seed)
 
     in
-       List.indexedMap (\i (a,b) ->  (i, {left = a, right = b, result = 0})) list
+       List.indexedMap (\i (a,b) ->  {left = a, right = b, result = 0, index = i}) list
 
 
 intPairGen : Random.Generator(Int, Int)
@@ -74,11 +76,11 @@ view model =
   div [] [table [] (List.map problemRow model)]
 
 
-problemRow : (Index, Multiplication) -> Html Msg
-problemRow (index, multi)  =
+problemRow : Multiplication -> Html Msg
+problemRow multi  =
     tr [classList [ ("highlight", multi.left * multi.right == multi.result) ] ]
         [ quizElement multi.left multi.right
-        , answerElement index
+        , answerElement multi.index
         ]
 
 
