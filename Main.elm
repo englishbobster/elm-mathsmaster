@@ -10,6 +10,7 @@ import Task exposing (..)
 import String exposing (..)
 import Result exposing (..)
 
+
 -- MODEL
 type alias Multiplication =
     {
@@ -54,7 +55,9 @@ update msg model =
 
 asInt : String -> Int
 asInt string =
-    String.toInt string |> Result.toMaybe |> Maybe.withDefault 0
+    String.toInt string
+        |> Result.toMaybe
+        |> Maybe.withDefault 0
 
 
 timeInSeconds : Time  -> Int
@@ -73,7 +76,7 @@ quizGenerator size seed =
 
 intPairGen : Random.Generator(Int, Int)
 intPairGen =
-    Random.pair (Random.int 1 12) (Random.int 1 12)
+    Random.pair (Random.int 2 12) (Random.int 2 12)
 
 
 -- SUBSCRIPTIONS
