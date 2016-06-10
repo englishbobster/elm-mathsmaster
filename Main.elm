@@ -7,6 +7,8 @@ import Html.Events exposing (onInput)
 import Random exposing (Seed)
 import Time exposing (..)
 import Task exposing (..)
+import String exposing (..)
+import Result exposing (..)
 
 -- MODEL
 type alias Multiplication =
@@ -43,12 +45,22 @@ update msg model =
         ( (quizGenerator 10 (timeInSeconds now)), Cmd.none )
 
     Answer index result ->
-        (model, Cmd.none)
+        let
+            updateEntry e =
+                if e.index == index then {e | result = (asInt result)} else e
+        in
+            ( List.map updateEntry model, Cmd.none)
+
+
+asInt : String -> Int
+asInt string =
+    String.toInt string |> Result.toMaybe |> Maybe.withDefault 0
 
 
 timeInSeconds : Time  -> Int
 timeInSeconds time =
     round (inSeconds time)
+
 
 quizGenerator : Int -> Int -> List Multiplication
 quizGenerator size seed =
@@ -80,7 +92,7 @@ problemRow : Multiplication -> Html Msg
 problemRow multi  =
     tr [classList [ ("highlight", multi.left * multi.right == multi.result) ] ]
         [ quizElement multi.left multi.right
-        , answerElement multi.index
+        , answerElement multi.index multi.result
         ]
 
 
@@ -89,13 +101,13 @@ quizElement left right =
     td [] [ text(row left right) ]
 
 
-answerElement : Int -> Html Msg
-answerElement index =
+answerElement : Int -> Int -> Html Msg
+answerElement index result =
      td [] [ input [ type' "number"
                    , Html.Attributes.min "0"
                    , Html.Attributes.max "999"
                    , size 3
-                   , value "0"
+                   , value (toString result)
                    , onInput (Answer index)
                    ] [ ]
            ]
