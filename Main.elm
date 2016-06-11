@@ -88,7 +88,7 @@ subscriptions model =
 -- VIEW
 view : Model -> Html Msg
 view model =
-  div [] [table [] (List.map problemRow model)]
+  div [id "container"] [table [] (List.map problemRow model)]
 
 
 problemRow : Multiplication -> Html Msg
