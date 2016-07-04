@@ -1,56 +1,19 @@
 module Main exposing (..)
 
+import Messages exposing (Msg(..))
 import Models exposing (Model, Multiplication, initialModel)
-import QuizGen exposing (quizGenerator, intPairGen)
+import Update exposing (update)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.App as Html
 import Html.Events exposing (onInput)
 import Time exposing (..)
-import Task exposing (..)
-import String exposing (..)
-import Result exposing (..)
-
+import Task exposing (perform)
 
 
 initial : ( Model, Cmd Msg )
 initial = ( initialModel, currentTime )
-
-
--- UPDATE
-type Msg = NoOp
-    | Now Time
-    | Answer Int String
-
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
-  case msg of
-    NoOp ->
-        ( model, Cmd.none)
-
-    Now now ->
-        ( (quizGenerator 10 (timeInSeconds now)), Cmd.none )
-
-    Answer index result ->
-        let
-            updateEntry e =
-                if e.index == index then {e | result = (asInt result)} else e
-        in
-            ( List.map updateEntry model, Cmd.none)
-
-
-asInt : String -> Int
-asInt string =
-    String.toInt string
-        |> Result.toMaybe
-        |> Maybe.withDefault 0
-
-
-timeInSeconds : Time  -> Int
-timeInSeconds time =
-    round (inSeconds time)
 
 
 -- SUBSCRIPTIONS
