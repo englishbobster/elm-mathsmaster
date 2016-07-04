@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     },
     watch: {
       elm: {
-        files: ["Main.elm"],
+                files: ["Main.elm", "QuizGen.elm", "Models.elm"],
         tasks: ["elm"]
       }
     },

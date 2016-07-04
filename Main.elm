@@ -1,29 +1,17 @@
 module Main exposing (..)
 
+import Models exposing (Model, Multiplication, initialModel)
+import QuizGen exposing (quizGenerator, intPairGen)
+
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.App as Html
 import Html.Events exposing (onInput)
-import Random exposing (Seed)
 import Time exposing (..)
 import Task exposing (..)
 import String exposing (..)
 import Result exposing (..)
 
-
--- MODEL
-type alias Multiplication =
-    {
-      left: Int
-    , right: Int
-    , result: Int
-    , index: Int
-    }
-
-type alias Model = List Multiplication
-
-initialModel : Model
-initialModel = []
 
 
 initial : ( Model, Cmd Msg )
@@ -63,20 +51,6 @@ asInt string =
 timeInSeconds : Time  -> Int
 timeInSeconds time =
     round (inSeconds time)
-
-
-quizGenerator : Int -> Int -> List Multiplication
-quizGenerator size seed =
-    let
-       (list, _) = Random.step ( Random.list size intPairGen) ( Random.initialSeed seed)
-
-    in
-       List.indexedMap (\i (a,b) ->  {left = a, right = b, result = 0, index = i}) list
-
-
-intPairGen : Random.Generator(Int, Int)
-intPairGen =
-    Random.pair (Random.int 2 12) (Random.int 2 12)
 
 
 -- SUBSCRIPTIONS
