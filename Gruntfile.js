@@ -14,7 +14,8 @@ module.exports = function(grunt) {
                         "QuizGen.elm",
                         "Models.elm",
                         "Messages.elm",
-                        "Update.elm"],
+                        "Update.elm",
+                        "View.elm"],
         tasks: ["elm"]
       }
     },
