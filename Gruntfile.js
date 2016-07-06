@@ -15,7 +15,8 @@ module.exports = function(grunt) {
                         "Models.elm",
                         "Messages.elm",
                         "Update.elm",
-                        "View.elm"],
+                        "View.elm",
+                        "ReqBodies.elm"],
         tasks: ["elm"]
       }
     },
